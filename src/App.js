@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { TaskForm } from './components/TaskForm';
+import TaskList from './components/TaskList';
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+
+  const changeInput = (value, index, id) => {
+    setTasks([...tasks.slice(0, index), { id, body: value }, ...tasks.slice(index + 1)]);
+  };
+
+  const addTask = (task) => {
+    setTasks([...tasks, task]);
+  };
+
+  const removeTask = (task) => {
+    setTasks(tasks.filter((t) => t.id !== task.id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="max-w-4xl mx-auto pr-5 pl-5">
+      <h1 className="text-5xl mt-8 mb-8 text-black font-bold">todoist</h1>
+      <TaskForm add={addTask} />
+      <h2 className="text-4xl text-black font-bold mb-8 mt-8">Tasks</h2>
+      <div>
+        <TaskList remove={removeTask} tasks={tasks} changeInput={changeInput} />
+      </div>
     </div>
   );
 }
